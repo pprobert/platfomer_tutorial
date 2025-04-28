@@ -34,16 +34,13 @@ end
 function love.draw()
     love.graphics.draw(background)
     Map:draw(-Camera.x, -Camera.y, Camera.scale, Camera.scale)
-    love.graphics.push()
-    love.graphics.scale(2, 2)
-
+    
     Camera:apply()
     Player:draw()
     Coin.drawAll()
     Spike.drawAll()
     Camera:clear()
 
-    love.graphics.pop()
     GUI:draw()
 end
 
