@@ -5,7 +5,7 @@ function Player:load()
     self.y = 0
     self.startX = self.x
     self.startY = self.y
-    self.width = 20
+    self.width = 30
     self.height = 60
     self.xVel = 0
     self.yVel = 0
@@ -42,6 +42,7 @@ function Player:load()
     self.physics.body:setFixedRotation(true)
     self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.fixture = love.physics.newFixture(self.physics.body,self.physics.shape)
+    self.physics.body:setGravityScale(0)
 end
 
 function Player:loadAssests()
@@ -241,8 +242,9 @@ function Player:draw()
     if self.direction == "left" then
         scaleX = -1
     end
+  
     love.graphics.setColor(self.color.red, self.color.green, self.color.blue)
-    love.graphics.draw(self.animation.draw, self.x, self.y, 0, scaleX, 1, self.animation.width / 1.5, self.animation.height / 1.5)
+    love.graphics.draw(self.animation.draw, self.x, self.y, 0, scaleX, 1, self.animation.width / 2, self.animation.height / 2)
     love.graphics.setColor(1,1,1,1)
 end
 
