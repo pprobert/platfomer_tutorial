@@ -6,6 +6,7 @@ local GUI = require("gui")
 local Spike = require("spikes")
 local Stone = require("stone")
 local Camera = require("camera")
+local Enemy = require("enemy")
 
 function love.load()
     Map = STI("map/firstMap.lua", {"box2d"})
@@ -13,15 +14,13 @@ function love.load()
     World:setCallbacks(beginContact, endContact)
     Map:box2d_init(World)
     Map.layers.solid.visible = false
+    Map.layers.entities.visible = false
     MapWidth = Map.layers.ground.width * 16
     background = love.graphics.newImage("assests/background.png")
     GUI:load()
+    Enemy.loadAssests()
     Player:load()
-    Coin.new(300, 200)
-    Coin.new(400, 200)
-    Coin.new(500, 200)
-    Spike.new(500, 325)
-    Stone.new(750, 315)
+    spawnEntities()
 end
 
 function love.update(dt)
@@ -30,6 +29,7 @@ function love.update(dt)
     Coin.updateAll(dt)
     Spike.updateAll(dt)
     Stone.updateAll(dt)
+    Enemy.updateAll(dt)
     GUI:update(dt)
     Camera:setPosition(Player.x, 0)
     
@@ -43,6 +43,7 @@ function love.draw()
     Coin.drawAll()
     Spike.drawAll()
     Stone.drawAll()
+    Enemy.drawAll()
     Camera:clear()
     GUI:draw()
 end
@@ -59,4 +60,18 @@ end
 
 function endContact(a, b, collision)
     Player:endContact(a, b, collision)
+end
+
+function spawnEntities()
+    for i,v in ipairs(Map.layers.entities.objects) do
+        if v.type ==  "spikes" then
+            Spike.new(v.x + v.width / 2, v.y + v.height / 2)
+        elseif v.type == "stone" then
+            Stone.new(v.x + v.width / 2, v.y + v.height / 2)
+        elseif v.type == "coin" then
+            Coin.new(v.x, v.y)
+        elseif v.type == "enemy" then
+            Enemy.new(v.x + v.width / 2, v.y + v.height / 2)
+        end
+    end
 end

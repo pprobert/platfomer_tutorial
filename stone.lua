@@ -13,13 +13,15 @@ function Stone.new(x,y)
     local instance = setmetatable({}, Stone)
     instance.x = x 
     instance.y = y 
-    instance.scaleX =1
+    instance.r = 0
+    instance.scaleX = 1
     
 
     instance.physics = {}
     instance.physics.body = love.physics.newBody(World, instance.x, instance.y, "dynamic")
     instance.physics.shape = love.physics.newRectangleShape(instance.width * 0.5095, instance.height)
     instance.physics.fixture = love.physics.newFixture(instance.physics.body, instance.physics.shape)
+    instance.physics.body:setMass(25)
     table.insert(ActiveStones, instance)
 end
 
@@ -29,10 +31,11 @@ end
 
 function Stone:synchPhysics()
     self.x, self.y = self.physics.body:getPosition()
+    self.r = self.physics.body:getAngle()
 end
 
 function Stone:draw()
-    love.graphics.draw(Stone.img, self.x, self.y, 0, self.scaleX, 1, self.width / 2, self.height / 2)
+    love.graphics.draw(Stone.img, self.x, self.y, self.r, self.scaleX, 1, self.width / 2, self.height / 2)
 end
 
 function Stone.updateAll(dt)

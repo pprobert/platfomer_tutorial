@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="23">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="37">
  <editorsettings>
   <export target="../firstMap.lua" format="lua"/>
  </editorsettings>
@@ -60,6 +60,26 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18,18,18,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup color="#5500ff" id="6" name="entities">
+  <object id="23" name="coin" type="coin" x="279.5" y="190.5">
+   <ellipse/>
+  </object>
+  <object id="30" name="coin" type="coin" x="603" y="239.167">
+   <ellipse/>
+  </object>
+  <object id="31" name="coin" type="coin" x="822.833" y="135.167">
+   <ellipse/>
+  </object>
+  <object id="29" name="coin" type="coin" x="191.167" y="199.167">
+   <ellipse/>
+  </object>
+  <object id="32" name="stone" type="stone" x="769" y="125.667" width="34" height="34"/>
+  <object id="34" name="spikes" type="spikes" x="260.788" y="303.606" width="34" height="34"/>
+  <object id="35" name="spikes" type="spikes" x="469.424" y="303.455" width="34" height="34"/>
+  <object id="36" name="enemy" type="enemy" x="803.333" y="266.667">
+   <point/>
+  </object>
+ </objectgroup>
  <objectgroup color="#aa0000" id="4" name="solid">
   <properties>
    <property name="collidable" type="bool" value="true"/>
