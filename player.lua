@@ -83,9 +83,13 @@ function Player:die()
     self.alive = false
 end
 
+function Player:resetPosition()
+    self.physics.body:setPosition(self.startX, self.startY)
+end
+
 function Player:respawn()
     if not self.alive then
-        self.physics.body:setPosition(self.startX, self.startY)
+        self:resetPosition()
         self.health.current = self.health.max
         self.alive = true
     end

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="38">
  <editorsettings>
-  <export target="../firstMap.lua" format="lua"/>
+  <export target="../first1.lua" format="lua"/>
  </editorsettings>
  <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16" tilecount="28" columns="14">
   <image source="../../assests/tiles.png" trans="ff00ff" width="224" height="32"/>

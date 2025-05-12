@@ -25,6 +25,14 @@ function Stone.new(x,y)
     table.insert(ActiveStones, instance)
 end
 
+function Stone.removeAll()
+    for i,v in ipairs(ActiveStones) do
+        v.physics.body:destroy()
+    end
+
+    ActiveStones = {}
+end
+
 function Stone:update(dt)
     self:synchPhysics()
 end

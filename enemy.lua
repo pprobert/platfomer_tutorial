@@ -6,16 +6,28 @@ local Player = require("player")
 
 
 
-local ActiveEnemys = {}
+local ActiveEnemies = {}
 
 
-function Enemy.new(x,y)
+function Enemy.new(x,y, world)
     local instance = setmetatable({}, Enemy)
     instance.x = x 
     instance.y = y 
+    instance.offsetY = 8
     instance.r = 0
-    instance.scaleX = 1
     
+    instance.speed = 100
+    instance.speedMod = 1
+    instance.xVel = instance.speed
+
+    instance.rageCounter = 0 
+    instance.rageTrigger = 3
+
+    instance.damage = 1
+
+    instance.width = Enemy.width
+    instance.height = Enemy.height
+
     instance.state = "walk"
 
     instance.animation = {timer = 0, rate = 0.1}
@@ -29,21 +41,22 @@ function Enemy.new(x,y)
     instance.physics.shape = love.physics.newRectangleShape(instance.width * 0.4, instance.height * 0.75)
     instance.physics.fixture = love.physics.newFixture(instance.physics.body, instance.physics.shape)
     instance.physics.body:setMass(25)
-    table.insert(ActiveEnemys, instance)
+    table.insert(ActiveEnemies, instance)
 end
 
 function Enemy.loadAssests()
     Enemy.runAnim = {}
     for i = 1,4 do
-        Enemy.runAnim[i] = love.graphics.newImage("assests/enemy/run/"..i..".png")
+        Enemy.runAnim[i] = love.graphics.newImage("assests/enemy/run/run"..i..".png")
     end
     Enemy.walkAnim = {}
     for i = 1,4 do
-        Enemy.walkAnim[i] = love.graphics.newImage("assests/enemy/walk/"..i..".png")
+        Enemy.walkAnim[i] = love.graphics.newImage("assests/enemy/walk/walk"..i..".png")
     end
 
     Enemy.width = Enemy.runAnim[1]:getWidth()
     Enemy.height = Enemy.runAnim[1]:getHeight()
+
 end
 
 function Enemy:update(dt)
@@ -51,9 +64,26 @@ function Enemy:update(dt)
     self:updateAnimation(dt)
 end
 
+function Enemy:incrementRage()
+    self.rageCounter = self.rageCounter + 1
+    if self.rageCounter > self.rageTrigger then
+        self.state = "run"
+        self.speedMod = 3
+        self.rageCounter = 0
+    else
+        self.state = "walk"
+        self.speedMod = 1
+    end
+end
+
 function Enemy:synchPhysics()
     self.x, self.y = self.physics.body:getPosition()
-    self.r = self.physics.body:getAngle()
+    self.physics.body:setLinearVelocity(self.xVel * self.speedMod, 100)
+
+end
+
+function Enemy:flipDirection()
+    self.xVel = - self.xVel
 end
 
 function Enemy:updateAnimation(dt)
@@ -74,20 +104,43 @@ function Enemy:setNewFrame()
     self.animation.draw = anim.img[anim.current]
 end
 
+function Enemy.removeAll()
+    for i,v in ipairs(ActiveEnemies) do
+        v.physics.body:destroy()
+    end
+
+    ActiveEnemies = {}
+end
 
 function Enemy:draw()
-    love.graphics.draw(self.animation.draw, self.x, self.y, self.r, self.scaleX, 1, self.width / 2, self.height / 2)
+    local scaleX = 1
+    if self.xVel < 0 then
+        scaleX = -1
+    end
+    love.graphics.draw(self.animation.draw, self.x, self.y + self.offsetY, self.r, scaleX, 1, self.width / 2, self.height / 2)
 end
 
 function Enemy.updateAll(dt)
-    for i,instance in ipairs(ActiveEnemys) do
+    for i,instance in ipairs(ActiveEnemies) do
         instance:update(dt)
     end
 end
 
 function Enemy.drawAll()
-    for i,instance in ipairs(ActiveEnemys) do
+    for i,instance in ipairs(ActiveEnemies) do
         instance:draw()
+    end
+end
+
+function Enemy.beginContact(a, b, collision)
+    for i, instance in ipairs(ActiveEnemies) do 
+        if a == instance.physics.fixture or b == instance.physics.fixture then
+            if a == Player.physics.fixture or b == Player.physics.fixture then
+                Player:takeDamage(instance.damage)
+            end
+            instance:incrementRage()
+            instance:flipDirection()
+        end
     end
 end
 

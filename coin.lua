@@ -37,6 +37,14 @@ function Coin:remove()
     end
 end
 
+function Coin.removeAll()
+    for i,v in ipairs(ActiveCoins) do
+        v.physics.body:destroy()
+    end
+
+    ActiveCoins = {}
+end
+
 function Coin:update(dt)
     self:spin(dt)
     self:checkRemove()

@@ -9,23 +9,33 @@ Spike.height = Spike.img:getHeight()
 local ActiveSpikes = {}
 local Player = require("player")
 
-function Spike.new(x,y)
+function Spike.new(x,y, world)
     local instance = setmetatable({}, Spike)
     instance.x = x 
     instance.y = y 
     
+    instance.scaleX = 1
+
     instance.damage = 1
 
     instance.physics = {}
-    instance.physics.body = love.physics.newBody(World, instance.x, instance.y, "static")
-    instance.physics.shape = love.physics.newRectangleShape(instance.width, instance.height)
+    instance.physics.body = love.physics.newBody(world, instance.x, instance.y, "static")
+    instance.physics.shape = love.physics.newRectangleShape(Spike.width, Spike.height)
     instance.physics.fixture = love.physics.newFixture(instance.physics.body, instance.physics.shape)
     instance.physics.fixture:setSensor(true)
     table.insert(ActiveSpikes, instance)
 end
 
+function Spike.removeAll()
+    for i,v in ipairs(ActiveSpikes) do
+        v.physics.body:destroy()
+    end
+
+    ActiveSpikes = {}
+end
+
 function Spike:update(dt)
-    
+    self.x, self.y = self.physics.body:getPosition()
 end
 
 function Spike:draw()
