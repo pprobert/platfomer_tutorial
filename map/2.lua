@@ -226,7 +226,7 @@ return {
         {
           id = 35,
           name = "spikes",
-          type = "spikes     ",
+          type = "spikes",
           shape = "rectangle",
           x = 192.667,
           y = 285,
@@ -239,7 +239,7 @@ return {
         {
           id = 37,
           name = "spikes",
-          type = "spikes     ",
+          type = "spikes",
           shape = "rectangle",
           x = 428.333,
           y = 285.667,
