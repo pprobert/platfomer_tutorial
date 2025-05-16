@@ -8,6 +8,7 @@ local Stone = require("stone")
 local Camera = require("camera")
 local Enemy = require("enemy")
 local Map = require("map")
+local Sound = require("sound")
 
 function love.load()
     Enemy.loadAssests()
@@ -15,6 +16,9 @@ function love.load()
     background = love.graphics.newImage("assests/background.png")
     GUI:load()
     Player:load()
+    Sound:init("jump", "sfx/player_jump.ogg", "static")
+    Sound:init("coin", "sfx/player_get_coin.ogg", "static")
+    Sound:init("hit", "sfx/player_hit.ogg", "static")
 end
 
 function love.update(dt)
@@ -27,6 +31,7 @@ function love.update(dt)
     GUI:update(dt)
     Camera:setPosition(Player.x, 0)
     Map:update(dt)
+    Sound:update()
 end
 
 function love.draw()
@@ -40,6 +45,7 @@ function love.draw()
     Enemy.drawAll()
     Camera:clear()
     GUI:draw()
+    
 end
 
 function love.keypressed(key)

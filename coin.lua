@@ -9,6 +9,7 @@ Coin.height = Coin.img:getHeight()
 
 local ActiveCoins = {}
 local Player = require("player")
+local Sound = require("sound")
 
 function Coin.new(x,y)
     local instance = setmetatable({}, Coin)
@@ -35,6 +36,7 @@ function Coin:remove()
             table.remove(ActiveCoins, i)
         end
     end
+    Sound:play("coin", "sfx")
 end
 
 function Coin.removeAll()
