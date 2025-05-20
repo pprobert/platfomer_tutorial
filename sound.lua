@@ -57,6 +57,9 @@ function Sound:setPitch(channel, pitch)
     end
 end
 
+function Sound: isPlaying(name, type)
+    if not self:play("run", "sfx") then return false end
+end
 
 function Sound:stop(channel)
     assert(Sound.active[channel] ~= nil, "Channel doesn't exist")

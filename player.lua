@@ -83,6 +83,7 @@ end
 
 function Player:die()
     self.alive = false
+    Sound:play("death", "sfx")
 end
 
 function Player:resetPosition()
@@ -140,6 +141,7 @@ function Player:updateAnimation(dt)
     if self.animation.timer > self.animation.rate then
         self.animation.timer = 0
         self:setNewFrame()
+        
     end
 end
 
@@ -176,8 +178,14 @@ end
 function Player:move(dt)
    if love.keyboard.isDown("d", "right") then
        self.xVel = math.min(self.xVel + self.acceleration * dt, self.maxSpeed)
+       if not Sound:isPlaying("run", "sfx") then
+            Sound:play("run", "sfx")
+        end
     elseif love.keyboard.isDown("a", "left") then
        self.xVel = math.max(self.xVel - self.acceleration * dt, -self.maxSpeed)
+       if not Sound:isPlaying("run", "sfx") then
+            Sound:play("run", "sfx")
+        end
    else
         self:applyFriction(dt)
     end
