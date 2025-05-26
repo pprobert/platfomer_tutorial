@@ -193,12 +193,12 @@ function Player:move(dt)
     -- Only play run SFX if player is grounded and moving
     if self.grounded and isMoving then
         if not self.isRunningSoundPlaying then
-            Sound:play("run", "sfx")
+            Sound:play("run", "footsteps", 0.4, 1, true)
             self.isRunningSoundPlaying = true
         end
     else
         if self.isRunningSoundPlaying then
-            Sound:stop("run", "sfx") -- Custom function, see below
+            Sound:stop("footsteps") -- Custom function, see below
             self.isRunningSoundPlaying = false
         end
     end

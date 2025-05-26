@@ -27,18 +27,19 @@ function Sound:play(id, channel, volume, pitch, loop)
         source = Sound.source[id]
     end
 
-    local channel = channel or "default"
+    channel = channel or "default"
+
+    -- Prevent replaying the same sound if already looping
+    if loop and self:isPlaying(channel) then return end
+
     local clone = source:clone()
     clone:setVolume(volume or 1)
     clone:setPitch(pitch or 1)
     clone:setLooping(loop or false)
     clone:play()
 
-    if Sound.active[channel] == nil then
-        Sound.active[channel] = {}
-    end
-
-    table.insert(Sound.active[channel], clone)
+    self.active[channel] = self.active[channel] or {}
+    table.insert(self.active[channel], clone)
 
     return clone
 end
@@ -57,9 +58,16 @@ function Sound:setPitch(channel, pitch)
     end
 end
 
-function Sound:isPlaying(name, category)
-    local snd = self[category][name] or self.sfx[name]
-    return snd and snd:isPlaying()
+function Sound:isPlaying(channel)
+    local channelSounds = Sound.active[channel]
+    if channelSounds then
+        for _, snd in ipairs(channelSounds) do
+            if snd:isPlaying() then
+                return true
+            end
+        end
+    end
+    return false
 end
 
 function Sound:stop(channel)

@@ -4,7 +4,7 @@ local Enemy = {}
 Enemy.__index = Enemy
 local Player = require("player")
 
-
+local Sound = require("sound")
 
 local ActiveEnemies = {}
 
@@ -29,6 +29,10 @@ function Enemy.new(x,y, world)
     instance.height = Enemy.height
 
     instance.state = "walk"
+
+    instance.isMovingSoundPlaying = false
+    instance.soundChannel = "enemy" .. tostring(#ActiveEnemies + 1) -- unique per enemy
+
 
     instance.animation = {timer = 0, rate = 0.1}
     instance.animation.run = {total = 4, current = 1, img = Enemy.runAnim}
@@ -62,7 +66,23 @@ end
 function Enemy:update(dt)
     self:synchPhysics()
     self:updateAnimation(dt)
+
+    local soundID = (self.state == "run") and "enemy_run" or "enemy_walk"
+    local isMoving = math.abs(self.xVel) > 0
+
+    if isMoving then
+        if not self.isMovingSoundPlaying then
+            Sound:play(soundID, self.soundChannel, 0.4, 1, true) -- volume=0.4, loop=true
+            self.isMovingSoundPlaying = true
+        end
+    else
+        if self.isMovingSoundPlaying then
+            Sound:stop(self.soundChannel)
+            self.isMovingSoundPlaying = false
+        end
+    end
 end
+
 
 function Enemy:incrementRage()
     self.rageCounter = self.rageCounter + 1
@@ -105,10 +125,10 @@ function Enemy:setNewFrame()
 end
 
 function Enemy.removeAll()
-    for i,v in ipairs(ActiveEnemies) do
+    for i, v in ipairs(ActiveEnemies) do
+        Sound:stop(v.soundChannel)
         v.physics.body:destroy()
     end
-
     ActiveEnemies = {}
 end
 
