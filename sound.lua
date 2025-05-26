@@ -57,8 +57,9 @@ function Sound:setPitch(channel, pitch)
     end
 end
 
-function Sound: isPlaying(name, type)
-    if not self:play("run", "sfx") then return false end
+function Sound:isPlaying(name, category)
+    local snd = self[category][name] or self.sfx[name]
+    return snd and snd:isPlaying()
 end
 
 function Sound:stop(channel)
@@ -73,6 +74,12 @@ function Sound:update()
         if channel[1] ~= nil and not channel[1]:isPlaying() then
             table.remove(channel, 1)
         end
+    end
+end
+
+function Sound:setLooping(loop)
+    for _, snd in pairs(self.sfx) do
+        snd:setLooping(loop)
     end
 end
 

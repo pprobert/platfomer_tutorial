@@ -39,6 +39,8 @@ function Player:load()
 
     self:loadAssests()
 
+    self.isRunningSoundPlaying = false
+
     self.physics = {}
     self.physics.body = love.physics.newBody(World,self.x,self.y,"dynamic")
     self.physics.body:setFixedRotation(true)
@@ -176,18 +178,29 @@ function Player:applyGravity(dt)
 end
 
 function Player:move(dt)
-   if love.keyboard.isDown("d", "right") then
-       self.xVel = math.min(self.xVel + self.acceleration * dt, self.maxSpeed)
-       if not Sound:isPlaying("run", "sfx") then
-            Sound:play("run", "sfx")
-        end
+    local isMoving = false
+
+    if love.keyboard.isDown("d", "right") then
+        self.xVel = math.min(self.xVel + self.acceleration * dt, self.maxSpeed)
+        isMoving = true
     elseif love.keyboard.isDown("a", "left") then
-       self.xVel = math.max(self.xVel - self.acceleration * dt, -self.maxSpeed)
-       if not Sound:isPlaying("run", "sfx") then
-            Sound:play("run", "sfx")
-        end
-   else
+        self.xVel = math.max(self.xVel - self.acceleration * dt, -self.maxSpeed)
+        isMoving = true
+    else
         self:applyFriction(dt)
+    end
+
+    -- Only play run SFX if player is grounded and moving
+    if self.grounded and isMoving then
+        if not self.isRunningSoundPlaying then
+            Sound:play("run", "sfx")
+            self.isRunningSoundPlaying = true
+        end
+    else
+        if self.isRunningSoundPlaying then
+            Sound:stop("run", "sfx") -- Custom function, see below
+            self.isRunningSoundPlaying = false
+        end
     end
 end
 
