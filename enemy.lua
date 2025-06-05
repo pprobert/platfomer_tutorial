@@ -40,7 +40,7 @@ function Enemy.new(x,y, world)
     instance.animation.draw = instance.animation.walk.img[1]
 
     instance.physics = {}
-    instance.physics.body = love.physics.newBody(World, instance.x, instance.y, "dynamic")
+    instance.physics.body = love.physics.newBody(world, instance.x, instance.y, "dynamic")
     instance.physics.body:setFixedRotation(true)
     instance.physics.shape = love.physics.newRectangleShape(instance.width * 0.4, instance.height * 0.75)
     instance.physics.fixture = love.physics.newFixture(instance.physics.body, instance.physics.shape)
@@ -163,5 +163,7 @@ function Enemy.beginContact(a, b, collision)
         end
     end
 end
+
+Enemy.ActiveEnemies = ActiveEnemies
 
 return Enemy

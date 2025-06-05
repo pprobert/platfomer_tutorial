@@ -1,36 +1,35 @@
-
-
-local Stone = {img = love.graphics.newImage("assests/stone.png")}
+local Stone = {}
 Stone.__index = Stone
 
+Stone.img = love.graphics.newImage("assests/stone.png")
 Stone.width = Stone.img:getWidth()
 Stone.height = Stone.img:getHeight()
 
 local ActiveStones = {}
+Stone.ActiveStones = ActiveStones
 
-
-function Stone.new(x,y)
+function Stone.new(x, y, world)
     local instance = setmetatable({}, Stone)
-    instance.x = x 
-    instance.y = y 
-    instance.r = 0
+
+    instance.x = x
+    instance.y = y
     instance.scaleX = 1
-    
 
     instance.physics = {}
-    instance.physics.body = love.physics.newBody(World, instance.x, instance.y, "dynamic")
-    instance.physics.shape = love.physics.newRectangleShape(instance.width * 0.5095, instance.height)
+    instance.physics.body = love.physics.newBody(world, x, y, "static")
+    instance.physics.shape = love.physics.newRectangleShape(Stone.width, Stone.height)
     instance.physics.fixture = love.physics.newFixture(instance.physics.body, instance.physics.shape)
-    instance.physics.body:setMass(25)
+
     table.insert(ActiveStones, instance)
+    return instance
 end
 
 function Stone.removeAll()
-    for i,v in ipairs(ActiveStones) do
+    for i, v in ipairs(ActiveStones) do
         v.physics.body:destroy()
     end
-
     ActiveStones = {}
+    Stone.ActiveStones = ActiveStones -- Keep external reference updated
 end
 
 function Stone:update(dt)
@@ -43,17 +42,17 @@ function Stone:synchPhysics()
 end
 
 function Stone:draw()
-    love.graphics.draw(Stone.img, self.x, self.y, self.r, self.scaleX, 1, self.width / 2, self.height / 2)
+    love.graphics.draw(Stone.img, self.x, self.y, self.r, self.scaleX, 1, Stone.width / 2, Stone.height / 2)
 end
 
 function Stone.updateAll(dt)
-    for i,instance in ipairs(ActiveStones) do
+    for i, instance in ipairs(ActiveStones) do
         instance:update(dt)
     end
 end
 
 function Stone.drawAll()
-    for i,instance in ipairs(ActiveStones) do
+    for i, instance in ipairs(ActiveStones) do
         instance:draw()
     end
 end

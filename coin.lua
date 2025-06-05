@@ -11,29 +11,31 @@ local ActiveCoins = {}
 local Player = require("player")
 local Sound = require("sound")
 
-function Coin.new(x,y)
+function Coin.new(x, y, world)
     local instance = setmetatable({}, Coin)
-    instance.x = x 
-    instance.y = y 
-    
+    instance.x = x
+    instance.y = y
+
     instance.scaleX = 1
     instance.randomTimeOffset = math.random(0, 100)
     instance.toBeRemoved = false
 
     instance.physics = {}
-    instance.physics.body = love.physics.newBody(World, instance.x, instance.y, "static")
+    instance.physics.body = love.physics.newBody(world, instance.x, instance.y, "static")
     instance.physics.shape = love.physics.newRectangleShape(instance.width, instance.height)
     instance.physics.fixture = love.physics.newFixture(instance.physics.body, instance.physics.shape)
     instance.physics.fixture:setSensor(true)
+
     table.insert(ActiveCoins, instance)
 end
 
 function Coin:remove()
+    Player:incrementCoins()
+    self.physics.body:destroy()
     for i, instance in ipairs(ActiveCoins) do
         if instance == self then
-            Player:incrementCoins()
-            self.physics.body:destroy()
             table.remove(ActiveCoins, i)
+            break
         end
     end
     Sound:play("coin", "sfx")

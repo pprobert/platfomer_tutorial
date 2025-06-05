@@ -2,7 +2,7 @@ local Player = {}
 
 local Sound = require("sound")
 
-function Player:load()
+function Player:load(world)
     self.x = 100
     self.y = 0
     self.startX = self.x
@@ -42,7 +42,7 @@ function Player:load()
     self.isRunningSoundPlaying = false
 
     self.physics = {}
-    self.physics.body = love.physics.newBody(World,self.x,self.y,"dynamic")
+    self.physics.body = love.physics.newBody(world,self.x,self.y,"dynamic")
     self.physics.body:setFixedRotation(true)
     self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.fixture = love.physics.newFixture(self.physics.body,self.physics.shape)

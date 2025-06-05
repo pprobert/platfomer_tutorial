@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="38">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="43">
  <editorsettings>
   <export target="../first1.lua" format="lua"/>
  </editorsettings>
@@ -78,6 +78,9 @@
   <object id="35" name="spikes" type="spikes" x="469.424" y="303.455" width="34" height="34"/>
   <object id="36" name="enemy" type="enemy" x="814" y="276.667">
    <point/>
+  </object>
+  <object id="41" name="sun" type="sun" x="6" y="5" width="38" height="38">
+   <ellipse/>
   </object>
  </objectgroup>
  <objectgroup color="#aa0000" id="4" name="solid">
